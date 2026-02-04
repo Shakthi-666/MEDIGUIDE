@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from "react";
 import { toast } from "@/hooks/use-toast";
 import { Profile } from "@/hooks/useProfile";
@@ -41,13 +42,16 @@ function buildUserContext(profile: Profile | null): string {
   if (profile.health_conditions && profile.health_conditions.trim()) {
     parts.push(`Known health conditions: ${profile.health_conditions}`);
   }
+  if (profile.allergies && profile.allergies.trim()) {
+    parts.push(`ALLERGIES (CRITICAL - NEVER suggest remedies containing these): ${profile.allergies}`);
+  }
   if (profile.checkup_data && profile.checkup_data.trim()) {
     parts.push(`Recent checkup data: ${profile.checkup_data}`);
   }
   
   if (parts.length === 0) return "";
   
-  return `\n\n[USER HEALTH PROFILE - Use this to personalize your advice and consider any contraindications]\n${parts.join("\n")}`;
+  return `\n\n[USER HEALTH PROFILE - Use this to personalize your advice and consider any contraindications. NEVER suggest remedies containing user's listed allergies.]\n${parts.join("\n")}`;
 }
 
 export function useMediGuideChat() {
@@ -233,3 +237,4 @@ export function useMediGuideChat() {
     updateUserProfile,
   };
 }
+
